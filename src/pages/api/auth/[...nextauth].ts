@@ -15,7 +15,7 @@ export default NextAuth({
       }
     }),
   ],
-  
+
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
 
@@ -23,14 +23,33 @@ export default NextAuth({
       
       try {
         await fauna.query(
-          q.Create(
-            q.Collection('users'),
-            { data: { userEmail }}
+          q.If(
+            q.Not(
+              q.Exists(
+                q.Match(
+                  q.Index('user_by_email'),
+                  q.Casefold(user.email)
+                )
+              )
+            ),
+
+            q.Create(
+              q.Collection('users'),
+              { data: { userEmail }}
+            ),
+            q.Get( // select
+              q.Match(
+                q.Index('user_by_email'),
+                q.Casefold(user.email)
+              )
+            )
           )
+          
         )
 
         return true
-      } catch {
+      } catch (err) {
+        console.log(err)
         return false
       }
 
