@@ -13,7 +13,7 @@ type User = {
     }
 }
 
-export default async (req: NextApiRequest, response: NextApiResponse) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method == 'POST') {
 
         const session = await getSession ({ req })
@@ -63,9 +63,9 @@ export default async (req: NextApiRequest, response: NextApiResponse) => {
             cancel_url: process.env.STRIPE_CANCEL_URL
         })
 
-        return response.status(200).json({ sessionId: stripeCheckoutSession.id })
+        return res.status(200).json({ sessionId: stripeCheckoutSession.id })
     } else {
-        response.setHeader('Allow', 'POST')
-        response.status(405).end('Method not allowed')
+        res.setHeader('Allow', 'POST')
+        res.status(405).end('Method not allowed')
     }
 }
