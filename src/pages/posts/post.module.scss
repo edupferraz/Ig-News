@@ -27,7 +27,7 @@
         color: var(--gray-100);
 
         p, ul {
-            margin: 1.5 0;
+            margin: 1.5rem 0;
         }
 
         ul {
@@ -36,6 +36,10 @@
             li {
                 margin: 0.5rem 0;
             }
+        }
+
+        a {
+            color: var(--yellow-500);
         }
     }
 }
